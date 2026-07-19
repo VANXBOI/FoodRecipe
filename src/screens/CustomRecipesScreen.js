@@ -28,18 +28,20 @@ import {
     );
     console.log('favoriteRecipe from custom',favoriteRecipe);
     
-    const isFavourite = favoriteRecipe.includes(recipe.idCategory); // Adjust this according to your recipe structure
-  
+    const isFavourite = Array.isArray(favoriteRecipe) && favoriteRecipe.some(
+      (item) => item.title === recipe?.title || item.idFood === recipe?.idFood
+    );
+
     if (!recipe) {
       return (
         <View style={styles.container}>
-          <Text style={styles.title}>No Recipe Details Available</Text>
+          <Text style={styles.recipeTitle}>No Recipe Details Available</Text>
         </View>
       );
     }
   
     const handleToggleFavorite = () => {
-      dispatch(toggleFavorite(recipe)); // Adjust the action to handle recipe
+      dispatch(toggleFavorite(recipe));
     };
   
     return (
@@ -50,7 +52,7 @@ import {
       >
         {/* Recipe Image */}
         <View style={styles.imageContainer} testID="imageContainer">
-        {recipe.image && (
+          {recipe.image && (
             <Image source={{ uri: recipe.image }} style={styles.recipeImage} />
           )}
         </View>
@@ -61,7 +63,7 @@ import {
             onPress={() => navigation.goBack()}
             style={styles.backButton}
           >
-            <Text>Back</Text>
+            <Text>GoBack</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleToggleFavorite}
@@ -73,11 +75,11 @@ import {
   
         {/* Recipe Details */}
         <View style={styles.contentContainer} testID="contentContainer">
-        <Text style={styles.recipeTitle}>{recipe.title}</Text>
-  <View style={styles.sectionContainer}>
-    <Text style={styles.sectionTitle}>Content</Text>
-    <Text style={styles.contentText}>{recipe.description}</Text>
-  </View>
+          <Text style={styles.recipeTitle}>{recipe.title}</Text>
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>Content</Text>
+            <Text style={styles.contentText}>{recipe.description}</Text>
+          </View>
         </View>
       </ScrollView>
     );
